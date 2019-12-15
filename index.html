@@ -4,13 +4,24 @@
         <title>RSS Timeline</title>
     </head>
     <body>
-        <div class="containeк-fluide ml-0">
+        <div class="container-fluid ml-0">
             <div class="jumbotron">
-                <h4 class="display-4 mb-5">Enter your sourse</h4>
-                <form class="form-group">
-                    <input class="form-control" type="text" placeholder="Sourse">
-                    <input class="btn btn-primary mt-3" type="submit">
+                <h1 class="display-4 mb-5">Enter your source</h1>
+                <form class="form-group" id="source-form">
+                    <input class="form-control" type="text" id="field-url" placeholder="Source">
+                    <input class="btn btn-primary mt-3"  id="button-submit" type="submit" value="Subscribe">
                 </form>
+            </div>
+        </div>
+        <div id="rss-flow">
+            <div id="rss-container" class="card">
+            </div>
+        </div>
+        <div class="d-none" id="loading-container">
+            <div class="d-flex justify-content-center">
+                <p>Please wait <br>
+                    Data is loading ...
+                </p>
             </div>
         </div>
     </body>
