@@ -1,10 +1,28 @@
 <!doctype html>
 <html>
     <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>RSS Timeline</title>
     </head>
     <body>
-        <div class="container-fluid ml-0">
+        <div class="modal fade" id="modal-window" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="modal-title">Feed</h4>
+                        <button type="button class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="feed-modal-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
             <div class="jumbotron">
                 <h1 class="display-4 mb-5">Enter your source</h1>
                 <form class="form-group" id="source-form">
@@ -13,8 +31,8 @@
                 </form>
             </div>
         </div>
-        <div id="rss-flow">
-            <div id="rss-container" class="card">
+        <div class="row">
+            <div class="col-md-8 mb-3" id="rss-flow">
             </div>
         </div>
         <div class="d-none" id="loading-container">

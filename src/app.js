@@ -3,6 +3,7 @@ import WatchJS from 'melanke-watchjs';
 import axios from 'axios';
 import rssParser from './rssParser';
 import rssRender from './rssRender';
+import renderModal from './renderModal';
 
 const { watch } = WatchJS;
 
@@ -20,6 +21,7 @@ export default () => {
   const sourceForm = document.querySelector('#source-form');
   const rssFlow = document.querySelector('#rss-flow');
   const loadingContainer = document.querySelector('#loading-container');
+  const modalWindow = document.querySelector('#modal-window');
 
   inputUrl.addEventListener('input', () => {
     const { value } = inputUrl;
@@ -54,6 +56,10 @@ export default () => {
     event.preventDefault();
     const { value } = inputUrl;
     rssLoad(value);
+  });
+
+  rssFlow.addEventListener('click', (event) => {
+    renderModal(event.target, modalWindow);
   });
 
   watch(state, 'error', () => {

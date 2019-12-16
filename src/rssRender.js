@@ -1,7 +1,8 @@
 const rssContainer = document.querySelector('#rss-container');
 
 export default (data) => data.map((item) => {
-  const newContainer = rssContainer.cloneNode(true);
+  const newContainer = document.createElement('div');
+  newContainer.classList.add('card', 'card-body');
 
   const title = document.createElement('h2');
   title.classList.add('text-center');
@@ -12,11 +13,18 @@ export default (data) => data.map((item) => {
   link.classList.add('text-right');
   link.innerText = 'Source';
 
-  const description = document.createElement('p');
-  description.innerText = item.description;
+  const modalButton = document.createElement('button');
+  modalButton.setAttribute('type', 'button');
+  modalButton.setAttribute('value', 'Learn more');
+  modalButton.setAttribute('data-toggle', 'modal');
+  modalButton.setAttribute('data-target', '#modal-window');
+  modalButton.setAttribute('tabindex', '0');
+  modalButton.setAttribute('data-description', item.description);
+  modalButton.setAttribute('data-title', item.title);
+  modalButton.classList.add('btn', 'btn-primary', 'btnModal');
 
   newContainer.appendChild(title);
-  newContainer.appendChild(description);
+  newContainer.appendChild(modalButton);
   newContainer.appendChild(link);
 
   return newContainer.outerHTML;
