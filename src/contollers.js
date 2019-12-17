@@ -35,7 +35,6 @@ const rssLoad = (state) => {
         const isNewFeedAdded = latestSource && !isFeedExist(state, latestSource);
         if (isNewFeedAdded) {
           currentState.allFeeds = [latestSource, ...state.allFeeds];
-          console.log('gay');
         }
       }
     })
