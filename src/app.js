@@ -1,77 +1,37 @@
-import validator from 'validator';
-import WatchJS from 'melanke-watchjs';
-import axios from 'axios';
-import rssParser from './rssParser';
-import rssRender from './rssRender';
-import renderModal from './renderModal';
+import { watch } from 'melanke-watchjs';
+import { inputValidation, formSubmit, findFeed } from './handlers';
+import { checkInput } from './contollers';
+import {
+  renderFeeds,
+  renderSources,
+  renderModal,
+  renderError,
+} from './renderers';
 
-const { watch } = WatchJS;
-
-const corsUrl = 'https://cors-anywhere.herokuapp.com/';
-const updateInterval = 5000;
+const sourceForm = document.querySelector('#source-form');
+const inputUrl = document.querySelector('#input-url');
+const rssFlow = document.querySelector('#rss-flow');
 
 export default () => {
   const state = {
     isValidInput: true,
     enteredSources: [],
-    error: null,
+    allFeeds: [],
+    errorMessage: '',
+    link: '',
+    modalData: {
+      title: '',
+      description: '',
+    },
   };
 
-  const inputUrl = document.querySelector('#field-url');
-  const buttonSubmit = document.querySelector('#button-submit');
-  const sourceForm = document.querySelector('#source-form');
-  const rssFlow = document.querySelector('#rss-flow');
-  const loadingContainer = document.querySelector('#loading-container');
-  const modalWindow = document.querySelector('#modal-window');
+  watch(state, 'isValidInput', () => inputValidation(state));
+  watch(state, 'allFeeds', () => renderFeeds(state));
+  watch(state, 'modalData', () => renderModal(state));
+  watch(state, 'enteredSources', () => renderSources(state));
+  watch(state, 'errorMessage', () => renderError(state));
 
-  inputUrl.addEventListener('input', () => {
-    const { value } = inputUrl;
-    const isEnteredSource = (source) => state.enteredSources.includes(source);
-    state.isValidInput = validator.isURL(value) && !isEnteredSource(value);
-  });
-
-  watch(state, 'isValidInput', () => {
-    buttonSubmit.disabled = !state.isValidInput;
-    if (state.isValidInput) {
-      inputUrl.classList.remove('border-danger');
-    } else {
-      inputUrl.classList.add('border-danger');
-    }
-  });
-
-  const rssLoad = (link, interval = updateInterval) => {
-    axios.get(`${corsUrl}${link}`)
-      .then(({ data }) => {
-        const parsedData = rssParser(data);
-        const renderedData = rssRender(parsedData);
-        rssFlow.innerHTML = renderedData.join('\n');
-        inputUrl.value = '';
-        state.enteredSources = [...state.enteredSources, link];
-      })
-      .then(() => {
-        setTimeout(() => {
-          rssLoad(link);
-        }, interval);
-      })
-      .catch((error) => {
-        state.error = error;
-      });
-  };
-
-  sourceForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const { value } = inputUrl;
-    rssLoad(value);
-  });
-
-  rssFlow.addEventListener('click', (event) => {
-    renderModal(event.target, modalWindow);
-  });
-
-  watch(state, 'error', () => {
-    if (state.error) {
-      loadingContainer.classList.remove('d-none');
-      buttonSubmit.setAttribute('disabled', 'disabled');
-    }
-  });
+  inputUrl.addEventListener('input', (event) => checkInput(event, state));
+  rssFlow.addEventListener('click', findFeed(state));
+  sourceForm.addEventListener('submit', formSubmit(state));
 };
