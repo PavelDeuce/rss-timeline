@@ -1,5 +1,3 @@
-const rssContainer = document.querySelector('#rss-container');
-
 export default (data) => data.map((item) => {
   const newContainer = document.createElement('div');
   newContainer.classList.add('card', 'card-body');
