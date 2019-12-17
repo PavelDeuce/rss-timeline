@@ -8,6 +8,7 @@ import renderModal from './renderModal';
 const { watch } = WatchJS;
 
 const corsUrl = 'https://cors-anywhere.herokuapp.com/';
+const updateInterval = 5000;
 
 export default () => {
   const state = {
@@ -38,7 +39,7 @@ export default () => {
     }
   });
 
-  const rssLoad = (link) => {
+  const rssLoad = (link, interval = updateInterval) => {
     axios.get(`${corsUrl}${link}`)
       .then(({ data }) => {
         const parsedData = rssParser(data);
@@ -46,6 +47,11 @@ export default () => {
         rssFlow.innerHTML = renderedData.join('\n');
         inputUrl.value = '';
         state.enteredSources = [...state.enteredSources, link];
+      })
+      .then(() => {
+        setTimeout(() => {
+          rssLoad(link);
+        }, interval);
       })
       .catch((error) => {
         state.error = error;
