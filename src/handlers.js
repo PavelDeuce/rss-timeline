@@ -1,18 +1,11 @@
-import { rssLoad } from './contollers';
+import validator from 'validator';
+import loadRSS from './rssLoader';
+import { isEnteredSource } from './utils';
 
-const inputUrl = document.querySelector('#input-url');
-
-const inputValidation = (state) => {
-  const buttonSubmit = document.querySelector('#button-submit');
-
-  buttonSubmit.disabled = !state.isValidInput;
-  if (state.isValidInput) {
-    inputUrl.classList.add('is-valid');
-    inputUrl.classList.remove('is-invalid');
-  } else {
-    inputUrl.classList.add('is-invalid');
-    inputUrl.classList.remove('is-valid');
-  }
+const checkInput = (event, state) => {
+  const currentState = state;
+  const { value } = event.target;
+  currentState.isValidInput = validator.isURL(value) && !isEnteredSource(currentState, value);
 };
 
 const formSubmit = (state) => (event) => {
@@ -21,7 +14,15 @@ const formSubmit = (state) => (event) => {
   const currentState = state;
   const { value } = event.target['input-url'];
   currentState.link = value;
-  rssLoad(currentState);
+
+  loadRSS(currentState)
+    .then(() => {
+      currentState.loading.status = 'success';
+    })
+    .catch((error) => {
+      currentState.loading.status = 'failed';
+      currentState.loading.errorMessage = error;
+    });
 };
 
 const findFeed = (state) => (event) => {
@@ -32,7 +33,7 @@ const findFeed = (state) => (event) => {
 };
 
 export {
-  inputValidation,
+  checkInput,
   formSubmit,
   findFeed,
 };

@@ -1,28 +1,21 @@
-import validator from 'validator';
 import axios from 'axios';
 import _ from 'lodash';
-import rssParser from './rssParser';
+import parseRSS from './rssParser';
 import {
-  isEnteredSource,
   isSourceExist,
   findSource,
   isFeedExist,
 } from './utils';
 
-const checkInput = (event, state) => {
-  const currentState = state;
-  const { value } = event.target;
-  currentState.isValidInput = validator.isURL(value) && !isEnteredSource(currentState, value);
-};
-
-const rssLoad = (state) => {
+const loadRSS = (state) => {
   const corsUrl = 'https://cors-anywhere.herokuapp.com';
   const updateInterval = 5000;
   const currentState = state;
 
   return axios.get(`${corsUrl}/${state.link}`)
     .then(({ data }) => {
-      const parsedData = rssParser(data, currentState);
+      const { link } = currentState;
+      const parsedData = parseRSS(data, link);
 
       if (!isSourceExist(currentState)) {
         currentState.enteredSources = [...currentState.enteredSources, parsedData.feed];
@@ -38,13 +31,7 @@ const rssLoad = (state) => {
         }
       }
     })
-    .then(() => setTimeout(rssLoad, updateInterval, currentState))
-    .catch((error) => {
-      currentState.errorMessage = error;
-    });
+    .then(() => setTimeout(loadRSS, updateInterval, currentState));
 };
 
-export {
-  checkInput,
-  rssLoad,
-};
+export default loadRSS;

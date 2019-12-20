@@ -1,3 +1,18 @@
+const renderInputValidation = (state) => {
+  const inputUrl = document.querySelector('#input-url');
+  const buttonSubmit = document.querySelector('#button-submit');
+
+  if (state.isValidInput) {
+    buttonSubmit.removeAttribute('disabled');
+    inputUrl.classList.remove('is-invalid');
+    inputUrl.classList.add('is-valid');
+  } else {
+    buttonSubmit.setAttribute('disabled', 'disabled');
+    inputUrl.classList.add('is-invalid');
+    inputUrl.classList.remove('is-valid');
+  }
+};
+
 const renderFeeds = (state) => {
   const rssFlow = document.querySelector('#rss-flow');
   const feeds = state.allFeeds.map(({ title, link }) => (
@@ -43,14 +58,16 @@ const renderModal = (state) => {
 
 const renderError = (state) => {
   const errorDelay = 10000;
+
   const loadingContainer = document.querySelector('#loading-container');
   const buttonSubmit = document.querySelector('#button-submit');
+  const sourceForm = document.querySelector('#source-form');
 
-  if (state.errorMessage) {
+  if (state.loading.status === 'failed') {
     const errorContainer = `
       <div class="d-flex justify-content-center">
         <p>Something went wrong:</p>
-        <p>${state.errorMessage}</p>
+        <p>${state.loading.errorMessage}</p>
       </div>
     `;
     buttonSubmit.setAttribute('disabled', 'disabled');
@@ -58,6 +75,8 @@ const renderError = (state) => {
     setTimeout(() => {
       window.location.reload();
     }, errorDelay);
+  } else if (state.loading.status === 'success') {
+    sourceForm.reset();
   }
 };
 
@@ -65,5 +84,6 @@ export {
   renderFeeds,
   renderSources,
   renderModal,
+  renderInputValidation,
   renderError,
 };

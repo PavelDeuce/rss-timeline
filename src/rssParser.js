@@ -1,10 +1,11 @@
 const domParser = new DOMParser();
 
-export default (data, state) => {
+export default (data, sourceLink) => {
   const xml = domParser.parseFromString(data, 'application/xml');
   const items = xml.querySelectorAll('item');
-  const description = xml.querySelector('channel > title').textContent;
+
   const title = xml.querySelector('channel > description').textContent;
+  const description = xml.querySelector('channel > title').textContent;
 
   const mappedItems = [...items].map((item) => ({
     link: item.querySelector('link').textContent,
@@ -13,7 +14,7 @@ export default (data, state) => {
   }));
   return {
     feed: {
-      link: state.link,
+      link: sourceLink,
       title,
       description,
     },

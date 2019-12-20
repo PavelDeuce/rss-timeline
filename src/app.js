@@ -1,23 +1,22 @@
 import { watch } from 'melanke-watchjs';
-import { inputValidation, formSubmit, findFeed } from './handlers';
-import { checkInput } from './contollers';
+import { formSubmit, findFeed, checkInput } from './handlers';
 import {
   renderFeeds,
   renderSources,
   renderModal,
+  renderInputValidation,
   renderError,
 } from './renderers';
 
-const sourceForm = document.querySelector('#source-form');
-const inputUrl = document.querySelector('#input-url');
-const rssFlow = document.querySelector('#rss-flow');
-
 export default () => {
   const state = {
-    isValidInput: true,
+    isValidInput: false,
     enteredSources: [],
     allFeeds: [],
-    errorMessage: '',
+    loading: {
+      status: '',
+      errorMessage: '',
+    },
     link: '',
     modalData: {
       title: '',
@@ -25,11 +24,15 @@ export default () => {
     },
   };
 
-  watch(state, 'isValidInput', () => inputValidation(state));
+  const sourceForm = document.querySelector('#source-form');
+  const inputUrl = document.querySelector('#input-url');
+  const rssFlow = document.querySelector('#rss-flow');
+
+  watch(state, 'isValidInput', () => renderInputValidation(state));
   watch(state, 'allFeeds', () => renderFeeds(state));
   watch(state, 'modalData', () => renderModal(state));
   watch(state, 'enteredSources', () => renderSources(state));
-  watch(state, 'errorMessage', () => renderError(state));
+  watch(state, 'loading', () => renderError(state));
 
   inputUrl.addEventListener('input', (event) => checkInput(event, state));
   rssFlow.addEventListener('click', findFeed(state));
