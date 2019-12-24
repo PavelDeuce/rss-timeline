@@ -1,6 +1,6 @@
 const domParser = new DOMParser();
 
-export default (data, sourceLink) => {
+export default (data, value) => {
   const xml = domParser.parseFromString(data, 'application/xml');
   const items = xml.querySelectorAll('item');
 
@@ -14,7 +14,7 @@ export default (data, sourceLink) => {
   }));
   return {
     feed: {
-      link: sourceLink,
+      link: value,
       title,
       description,
     },

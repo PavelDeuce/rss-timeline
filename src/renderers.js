@@ -57,8 +57,6 @@ const renderModal = (state) => {
 };
 
 const renderError = (state) => {
-  const errorDelay = 10000;
-
   const loadingContainer = document.querySelector('#loading-container');
   const buttonSubmit = document.querySelector('#button-submit');
   const sourceForm = document.querySelector('#source-form');
@@ -70,12 +68,12 @@ const renderError = (state) => {
         <p>${state.loading.errorMessage}</p>
       </div>
     `;
-    buttonSubmit.setAttribute('disabled', 'disabled');
+    buttonSubmit.removeAttribute('disabled');
     loadingContainer.innerHTML = errorContainer;
-    setTimeout(() => {
-      window.location.reload();
-    }, errorDelay);
+    loadingContainer.classList.remove('d-none');
   } else if (state.loading.status === 'success') {
+    buttonSubmit.removeAttribute('disabled');
+    loadingContainer.classList.add('d-none');
     sourceForm.reset();
   }
 };
