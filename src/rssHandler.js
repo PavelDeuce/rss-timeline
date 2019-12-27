@@ -1,7 +1,4 @@
-const domParser = new DOMParser();
-
-export default (data, value) => {
-  const xml = domParser.parseFromString(data, 'application/xml');
+export default (xml, value) => {
   const items = xml.querySelectorAll('item');
 
   const title = xml.querySelector('channel > description').textContent;

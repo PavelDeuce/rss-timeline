@@ -1,10 +1,11 @@
 import axios from 'axios';
 import _ from 'lodash';
-import parseRSS from './rssParser';
+import processRSS from './rssHandler';
 import {
   isSourceExist,
   findSource,
   isFeedExist,
+  parseRSS,
 } from './utils';
 
 const loadRSS = (state) => {
@@ -15,15 +16,16 @@ const loadRSS = (state) => {
   return axios.get(`${corsUrl}/${state.link}`)
     .then(({ data }) => {
       const { link } = currentState;
-      const parsedData = parseRSS(data, link);
+      const parsedData = parseRSS(data);
+      const processedData = processRSS(parsedData, link);
 
       if (!isSourceExist(currentState)) {
-        currentState.enteredSources = [...currentState.enteredSources, parsedData.feed];
-        currentState.allFeeds = [...parsedData.mappedItems, ...state.allFeeds];
+        currentState.enteredSources = [...currentState.enteredSources, processedData.feed];
+        currentState.allFeeds = [...processedData.mappedItems, ...state.allFeeds];
       } else {
         const updatedSource = findSource(currentState);
         const [latestSource] = _.differenceWith(
-          parsedData.mappedItems, updatedSource.mapppedItems, _.isEqual,
+          processedData.mappedItems, updatedSource.mapppedItems, _.isEqual,
         );
         const isNewFeedAdded = latestSource && !isFeedExist(state, latestSource);
         if (isNewFeedAdded) {
