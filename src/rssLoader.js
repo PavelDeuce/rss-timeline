@@ -5,7 +5,7 @@ import {
   isSourceExist,
   findSource,
   isFeedExist,
-  parseRSS,
+  getDOM,
 } from './utils';
 
 const loadRSS = (state) => {
@@ -16,8 +16,8 @@ const loadRSS = (state) => {
   return axios.get(`${corsUrl}/${state.link}`)
     .then(({ data }) => {
       const { link } = currentState;
-      const parsedData = parseRSS(data);
-      const processedData = processRSS(parsedData, link);
+      const dom = getDOM(data);
+      const processedData = processRSS(dom, link);
 
       if (!isSourceExist(currentState)) {
         currentState.enteredSources = [...currentState.enteredSources, processedData.feed];
