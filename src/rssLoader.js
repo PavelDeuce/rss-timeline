@@ -5,8 +5,9 @@ import {
   isSourceExist,
   findSource,
   isFeedExist,
-  getDOM,
 } from './utils';
+
+const domParser = new DOMParser();
 
 const loadRSS = (state) => {
   const corsUrl = 'https://cors-anywhere.herokuapp.com';
@@ -16,8 +17,8 @@ const loadRSS = (state) => {
   return axios.get(`${corsUrl}/${state.link}`)
     .then(({ data }) => {
       const { link } = currentState;
-      const dom = getDOM(data);
-      const processedData = processRSS(dom, link);
+      const rssDocument = domParser.parseFromString(data, 'application/xml');
+      const processedData = processRSS(rssDocument, link);
 
       if (!isSourceExist(currentState)) {
         currentState.enteredSources = [...currentState.enteredSources, processedData.feed];

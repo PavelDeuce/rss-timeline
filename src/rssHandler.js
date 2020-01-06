@@ -1,8 +1,7 @@
-export default (xml, value) => {
-  const items = xml.querySelectorAll('item');
-
-  const title = xml.querySelector('channel > description').textContent;
-  const description = xml.querySelector('channel > title').textContent;
+export default (rssDocument, value) => {
+  const items = rssDocument.querySelectorAll('item');
+  const title = rssDocument.querySelector('channel > description').textContent;
+  const description = rssDocument.querySelector('channel > title').textContent;
 
   const mappedItems = [...items].map((item) => ({
     link: item.querySelector('link').textContent,

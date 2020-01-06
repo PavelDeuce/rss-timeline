@@ -10,15 +10,9 @@ const isFeedExist = (state, latestSource) => latestSource
 
 const findSource = (state) => state.enteredSources.find((source) => source.link === state.link);
 
-const getDOM = (data) => {
-  const domParser = new DOMParser();
-  return domParser.parseFromString(data, 'application/xml');
-};
-
 export {
   isEnteredSource,
   isSourceExist,
   isFeedExist,
   findSource,
-  getDOM,
 };
