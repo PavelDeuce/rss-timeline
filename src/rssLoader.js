@@ -1,6 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash';
-import processRSS from './rssHandler';
+import parseFeed from './rssParser';
 import {
   isSourceExist,
   findSource,
@@ -15,7 +15,7 @@ const loadRSS = (state) => {
   return axios.get(`${corsUrl}/${state.link}`)
     .then(({ data }) => {
       const { link } = currentState;
-      const processedData = processRSS(data, link);
+      const processedData = parseFeed(data, link);
 
       if (!isSourceExist(currentState)) {
         currentState.enteredSources = [...currentState.enteredSources, processedData.feed];
