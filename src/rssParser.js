@@ -1,7 +1,6 @@
 export const getDomDocument = (data) => {
   const domParser = new DOMParser();
-  const doc = domParser.parseFromString(data, 'application/xml');
-  return doc;
+  return domParser.parseFromString(data, 'application/xml');
 };
 
 export default (data, value) => {

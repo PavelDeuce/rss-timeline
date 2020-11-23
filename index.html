@@ -1,51 +1,55 @@
 <!doctype html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>RSS Timeline</title>
-    </head>
-    <body>
-        <div class="modal fade" id="modal-window" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="feed-modal-title"></h4>
-                    </div>
-                    <div class="modal-body" id="feed-modal-body">
-                    </div>
-                    <div class="modal-footer" id="feed-modal-footer">
-                        <button class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
+
+<html lang="eng">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>RSS Timeline</title>
+  </head>
+  <body>
+    <div class="modal fade" id="modal-window" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="feed-modal-title"></h4>
+          </div>
+          <div class="modal-body" id="feed-modal-body">
+          </div>
+          <div class="modal-footer" id="feed-modal-footer">
+            <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="jumbotron">
+        <form class="form-group" id="source-form">
+          <h4>Enter your source to generate news feed:</h4>
+          <label class="w-100">
+            <input class="form-control border is-invalid" type="text" id="input-url" placeholder="Source">
+          </label>
+          <small class="text-muted form-text">For example: http://lorem-rss.herokuapp.com/feed</small>
+          <!--<small class="text-muted form-text">https://3dnews.ru/news/rss/</small>-->
+          <button class="btn btn-primary mt-3" disabled  id="button-submit" type="submit">Subscribe</button>
+        </form>
+      </div>
+
+      <div id="loading-container" class="d-none"></div>
+
+      <div class="row">
+        <div id="list-rss-flow" class="col-md-5">
+          <div class="card">
+            <div class="card-header">Subscriptions</div>
+            <div class="card-body" id="feed-subscriptions"></div>
+          </div>
         </div>
 
-        <div class="container">
-            <div class="jumbotron">
-                <form class="form-group" id="source-form">
-                    <h4>Enter your source to generate news feed:</h4>
-                    <input class="form-control border is-invalid" type="text" id="input-url" placeholder="Source">
-                    <small class="text-muted form-text">For example: http://lorem-rss.herokuapp.com/feed</small>
-                    <!--<small class="text-muted form-text">https://3dnews.ru/news/rss/</small>-->
-                    <button class="btn btn-primary mt-3" disabled  id="button-submit" type="submit">Subscribe</button>
-                </form>
-            </div>
-
-            <div id="loading-container" class="d-none"></div>
-
-            <div class="row">
-                <div id="list-rss-flow" class="col-md-5">
-                    <div clas="card">
-                        <div class="card-header">Subscriptions</div>
-                        <div class="card-body" id="feed-subscriptions"></div>
-                    </div>
-                </div>
-
-            <div class="col-md-10">
-                <div class="row" id="rss-flow"></div>
-            </div>
+        <div class="col-md-10 mt-5">
+          <div class="row" id="rss-flow"></div>
         </div>
-    </body>
+      </div>
+    </div>
+  </body>
 </html>
